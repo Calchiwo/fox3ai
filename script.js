@@ -5,7 +5,7 @@ const wordElement = document.getElementById("rotating-word");
 setInterval(() => {
   index = (index + 1) % words.length;
   wordElement.textContent = words[index];
-}, 1000);
+}, 2500); // slowed down from 1000ms to 2500ms
 
 // Netlify form handling
 const form = document.querySelector("form");
@@ -16,6 +16,7 @@ form.addEventListener("submit", async function (e) {
   e.preventDefault();
 
   const formData = new FormData(form);
+
   try {
     const response = await fetch("/", {
       method: "POST",
@@ -24,11 +25,11 @@ form.addEventListener("submit", async function (e) {
     });
 
     if (response.ok) {
-      form.reset();
       successMessage.style.display = "block";
       errorMessage.style.display = "none";
+      form.reset();
     } else {
-      throw new Error("Submission failed");
+      throw new Error("Form failed");
     }
   } catch (error) {
     successMessage.style.display = "none";

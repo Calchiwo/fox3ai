@@ -38,11 +38,19 @@ body {
   font-size: 2rem;
   font-weight: bold;
   margin-bottom: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.inline-part {
+  margin: 0 6px;
 }
 
 .highlight {
   color: #1e40af;
-  transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.5s ease-in-out;
+  display: inline-block;
 }
 
 /* Subtext */
