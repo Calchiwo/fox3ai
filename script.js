@@ -1,41 +1,37 @@
-// script.js
+const words = ["extraordinary", "revolutionary", "game-changing", "mind-blowing"];
+let index = 0;
+const wordElement = document.getElementById("rotating-word");
 
-// Waitlist Form Submission (Basic Simulation)
-const form = document.querySelector('#waitlist-form');
-const emailInput = document.querySelector('#email');
-const message = document.querySelector('#message');
+setInterval(() => {
+  index = (index + 1) % words.length;
+  wordElement.textContent = words[index];
+}, 1000);
 
-form.addEventListener('submit', function (e) {
+// Netlify form handling
+const form = document.querySelector("form");
+const successMessage = document.getElementById("success-message");
+const errorMessage = document.getElementById("error-message");
+
+form.addEventListener("submit", async function (e) {
   e.preventDefault();
 
-  const email = emailInput.value.trim();
+  const formData = new FormData(form);
+  try {
+    const response = await fetch("/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams(formData).toString(),
+    });
 
-  if (email === '' || !email.includes('@')) {
-    message.textContent = 'Please enter a valid email.';
-    message.style.color = 'red';
-    return;
-  }
-
-  message.textContent = 'Thanks for joining the waitlist!';
-  message.style.color = 'green';
-
-  // Simulate clearing and logging
-  console.log('Email submitted:', email);
-  emailInput.value = '';
-});
-
-// Scroll Reveal (Optional Animation)
-const sections = document.querySelectorAll('.reveal');
-
-const revealOnScroll = () => {
-  sections.forEach(section => {
-    const top = section.getBoundingClientRect().top;
-    const windowHeight = window.innerHeight;
-    if (top < windowHeight - 100) {
-      section.classList.add('visible');
+    if (response.ok) {
+      form.reset();
+      successMessage.style.display = "block";
+      errorMessage.style.display = "none";
+    } else {
+      throw new Error("Submission failed");
     }
-  });
-};
-
-window.addEventListener('scroll', revealOnScroll);
-window.addEventListener('load', revealOnScroll);
+  } catch (error) {
+    successMessage.style.display = "none";
+    errorMessage.style.display = "block";
+  }
+});
