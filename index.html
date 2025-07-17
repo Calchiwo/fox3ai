@@ -9,17 +9,20 @@
 <body>
   <div class="container">
     <span class="badge">COMING SOON</span>
+    
     <h1 class="headline">
-      <span class="inline-part">Something</span>
-      <span class="highlight" id="rotating-word">extraordinary</span>
-      <span class="inline-part">is coming</span>
+      <div class="line">Something</div>
+      <div class="line highlight" id="rotating-word">extraordinary</div>
+      <div class="line">is coming</div>
     </h1>
+
     <p class="subtext">
       Be among the first to know when we launch. Join the waitlist.
     </p>
 
-    <form name="waitlist" method="POST" data-netlify="true" class="waitlist-form" netlify>
+    <form name="waitlist" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="waitlist-form">
       <input type="hidden" name="form-name" value="waitlist" />
+      <input type="hidden" name="bot-field" />
       <input type="email" name="email" placeholder="Enter your email" required />
       <button type="submit">Subscribe</button>
       <p class="message success" id="success-message">🎉 Thanks for subscribing!</p>

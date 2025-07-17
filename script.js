@@ -2,10 +2,11 @@ const words = ["extraordinary", "revolutionary", "game-changing", "mind-blowing"
 let index = 0;
 const wordElement = document.getElementById("rotating-word");
 
+// Slowed down interval to 3s
 setInterval(() => {
   index = (index + 1) % words.length;
   wordElement.textContent = words[index];
-}, 2500); // slowed down from 1000ms to 2500ms
+}, 3000);
 
 // Netlify form handling
 const form = document.querySelector("form");
@@ -27,7 +28,7 @@ form.addEventListener("submit", async function (e) {
     if (response.ok) {
       successMessage.style.display = "block";
       errorMessage.style.display = "none";
-      form.reset();
+      form.style.display = "none"; // hide form on success
     } else {
       throw new Error("Form failed");
     }
