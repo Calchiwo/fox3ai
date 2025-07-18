@@ -1,51 +1,48 @@
-const words = ["extraordinary", "revolutionary", "game-changing", "mind-blowing"];
-let index = 0;
-const wordElement = document.getElementById("rotating-word");
+document.addEventListener("DOMContentLoaded", function () {
+  // Word rotation functionality
+  const words = ["extraordinary", "revolutionary", "game-changing", "mind-blowing"];
+  let index = 0;
+  const wordElement = document.getElementById("rotating-word");
 
-setInterval(() => {
-  wordElement.style.opacity = 0;
-  setTimeout(() => {
-    index = (index + 1) % words.length;
-    wordElement.textContent = words[index];
-    wordElement.style.opacity = 1;
-  }, 300); // fade out duration
-}, 3000); // cycle every 3s
+  if (wordElement) {
+    setInterval(() => {
+      wordElement.style.opacity = 0;
+      setTimeout(() => {
+        index = (index + 1) % words.length;
+        wordElement.textContent = words[index];
+        wordElement.style.opacity = 1;
+      }, 300);
+    }, 3000);
+  }
 
-// Netlify Form Submission
-const form = document.querySelector("form");
-const successMessage = document.getElementById("success-message");
-const errorMessage = document.getElementById("error-message");
+  // Form submission - using CopyxPaste's proven method
+  const form = document.getElementById("waitlist-form");
+  const message = document.getElementById("form-message");
 
-function encode(data) {
-  return Object.keys(data)
-    .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(data[key]))
-    .join("&");
-}
+  if (form && message) {
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
 
-form.addEventListener("submit", async function (e) {
-  e.preventDefault();
-  const formData = {
-    "form-name": "waitlist",
-    email: form.email.value,
-  };
+      // Use FormData API like CopyxPaste
+      const data = new FormData(form);
+      
+      try {
+        const response = await fetch("/", {
+          method: "POST",
+          body: data,
+        });
 
-  try {
-    const response = await fetch("/", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: encode(formData),
+        if (response.ok) {
+          form.style.display = "none";
+          message.textContent = "🎉 Thanks for subscribing!";
+          message.style.color = "#1e40af";
+        } else {
+          throw new Error("Network response was not ok.");
+        }
+      } catch (error) {
+        message.textContent = "❌ Something went wrong. Try again later.";
+        message.style.color = "#dc2626";
+      }
     });
-
-    if (response.ok) {
-      form.reset();
-      form.style.display = "none";
-      successMessage.style.display = "block";
-      errorMessage.style.display = "none";
-    } else {
-      throw new Error("Network response was not ok.");
-    }
-  } catch (error) {
-    successMessage.style.display = "none";
-    errorMessage.style.display = "block";
   }
 });
